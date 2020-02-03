@@ -25,20 +25,23 @@ def sendMsg():
     entry.delete(0, END)
 
 def slideMessages():
+    canvas.delete(messages[0])
+    messages.remove(messages[0])
     for mess in messages:
-        text = mess['text']
-        messages.remove(mess)
-        mess.destroy()
+        xcoord, ycoord = canvas.coords(mess)[0], canvas.coords(mess)[1]
+        canvas.coords(mess, (xcoord, ycoord-20))
 
 def getMsg(s):
-    pad = 0
+    pad = -20
     while True:
+        if pad+40 > 360:
+            slideMessages()
+        else:
+            pad+=20
         text = s.recv(1024).decode('utf-8')
         label = Label(win, text=text)
-        canvas.create_window(400-3.2*len(text), 380-pad, window=label)
-        #slideMessages()
-        messages.append(label)
-        pad+=20
+        messages.append(canvas.create_window(400-3.2*len(text), 40+pad, window=label))
+
 
 _thread.start_new_thread(getMsg, (s, ))
 
