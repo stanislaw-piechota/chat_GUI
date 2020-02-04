@@ -5,11 +5,9 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connections = []
 clients = []
 
-IP = '0.0.0.0'
-PORT = 4444
-s.bind((IP, PORT))
+s.bind(('0.0.0.0', 4444))
+print(s)
 s.listen(1)
-print("Listening for clients on: " + IP + ":" + str(PORT))
 
 def handler(c, a):
 	while True:

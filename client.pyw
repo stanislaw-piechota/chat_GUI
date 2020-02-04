@@ -1,17 +1,18 @@
 import socket, _thread, sys
 from tkinter import *
 import config
+import json as js
 
 data = config.Config()
 messages = []
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((data.IP, data.PORT))
 
 win = Tk()
 
 canvas = Canvas(win, width=400, height=400)
 canvas.pack()
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((data.IP, data.PORT))
 
 entry = Entry(win, width=50)
 canvas.create_window(160, 15, window=entry)
@@ -21,7 +22,8 @@ canvas.create_window(300, 380, window=label)
 
 def sendMsg():
     msg = data.NICK + ": " + entry.get()
-    s.send(bytes(msg, "utf-8"))
+    msg = [msg, data.NICK]
+    s.send(bytes(js.dumps(msg), 'utf-8'))
     entry.delete(0, END)
 
 def slideMessages():
@@ -38,12 +40,16 @@ def getMsg(s):
             slideMessages()
         else:
             pad+=20
-        text = s.recv(1024).decode('utf-8')
+        msg=js.loads(s.recv(1024).decode('utf-8'))
+        text = msg[0]
+        fr = msg[1]
         label = Label(win, text=text)
-        messages.append(canvas.create_window(400-3.2*len(text), 40+pad, window=label))
+        if fr == data.NICK:
+            messages.append(canvas.create_window(400-3.2*len(text), 40+pad, window=label))
+        else:
+            messages.append(canvas.create_window(3.2*len(text), 40+pad, window=label))
 
-
-_thread.start_new_thread(getMsg, (s, ))
+_thread.start_new_thread(getMsg, (s , ))
 
 button = Button(win, text="ENTER", bg="green", command=sendMsg)
 canvas.create_window(360, 15, window=button)
