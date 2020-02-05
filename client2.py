@@ -1,16 +1,21 @@
 import socket, _thread, sys
 from tkinter import *
-#import config
+import config
 import json as js
+from random import choice
 
-class Config():
+'''class Config():
     def __init__(self):
-        self.IP = '127.0.0.1'
+        self.IP = "127.0.0.1"
         self.PORT = 4444
-        self.NICK = 'stas'
+        self.NICK = "guest"'''
 
-data = Config()
+data = config.Config()
 messages = []
+
+'''colors = ["red", "blue", "green", "yellow", "purple", "pink", "orange", \
+"grey", "brown", "mint", "peach", "violet", "aqua", "lemon", "bronze", "gold", \
+"silver"]'''
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((data.IP, data.PORT))

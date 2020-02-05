@@ -1,4 +1,5 @@
 from tkinter import *
+import socket
 
 class Config():
     def __init__(self):
