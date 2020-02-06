@@ -8,10 +8,14 @@ connections = []
 clients = []
 addNums = [0]
 
-IP = '0.0.0.0'
-PORT = 4444
-s.bind((IP, PORT))
-s.listen(1)
+IP = input("Type IP to listen on: ")
+PORT = int(input("Type Port: "))
+try:
+	s.bind((IP, PORT))
+except socket.error as e:
+	print(str(e))
+
+s.listen()
 print("Listening for clients on: " + IP + ":" + str(PORT))
 
 def handler(c, a):

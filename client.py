@@ -80,7 +80,12 @@ colors = ["red", "green", "blue", "yellow", "orange"]
 
 #connecting to server
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((data.IP, data.PORT))
+
+try:
+    s.connect((data.IP, data.PORT))
+    print('connected')
+except socket.error as e:
+    print(str(e))
 
 #table that will be used to check if nick isn't repeating
 #that could cause problem with displaying messages
